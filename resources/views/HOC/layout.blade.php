@@ -79,21 +79,19 @@
             <li><a href="{{ url('/services') }}">Services</a></li>
             <li><a href="{{ url('/contact') }}">Contact</a></li>
             <li><a href="{{ url('/products') }}">Products</a></li>
+            <li><a href="{{ url('/redirect') }}">Redirect</a></li>
         </ul>
     </nav>
-
 
     <header>
         <h1>@yield('header')</h1>
     </header>
-
 
     <div class="container">
         <section>
             @yield('content')
         </section>
     </div>
-
 
     <footer>
         <p>© 2024 Clemson</p>

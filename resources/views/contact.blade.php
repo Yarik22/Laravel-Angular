@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('./HOC/layout')
 
 @section('title', 'Contact Us')
 
