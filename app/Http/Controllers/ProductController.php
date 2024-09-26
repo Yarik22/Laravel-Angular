@@ -1,52 +1,68 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
-class ProductController extends Controller
-{
-    private $products = [
-        1 => [
-            'name' => 'Product 1',
-            'price' => 100,
-            'description' => 'This is the first product description.',
-            'category' => 'Category 1',
-            'status' => 'in stock',
-        ],
-        2 => [
-            'name' => 'Product 2',
-            'price' => 200,
-            'description' => 'This is the second product description.',
-            'category' => 'Category 2',
-            'status' => 'running out',
-        ],
-        3 => [
-            'name' => 'Product 3',
-            'price' => 300,
-            'description' => 'This is the third product description.',
-            'category' => 'Category 3',
-            'status' => 'running out',
-        ],
-        4 => [
-            'name' => 'Product 4',
-            'price' => 400,
-            'description' => 'This is the fourth product description.',
-            'category' => 'Category 4',
-            'status' => 'out of stock',
-        ],
-    ];
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class ProductController
+{
     public function index()
     {
-        return view('products.index', ['products' => $this->products]);
+        $products = DB::table('products')->get();
+        return view('products.index', compact('products'));
+    }
+
+    public function create()
+    {
+        return view('products.create');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            'description' => 'nullable|string',
+            'category' => 'required|string',
+            'status' => 'required|in:in stock,out of stock,running out',
+        ]);
+
+        DB::table('products')->insert($request->only(['name', 'price', 'description', 'category', 'status']));
+
+        return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
 
     public function show($id)
     {
-        if (array_key_exists($id, $this->products)) {
-            $product = $this->products[$id];
-            return view('products.show', ['product' => $product]);
-        } else {
-            return abort(404, 'Product not found');
-        }
+        $product = DB::table('products')->where('id', $id)->first();
+        return view('products.show', compact('product'));
+    }
+
+    public function edit($id)
+    {
+        $product = DB::table('products')->where('id', $id)->first();
+        return view('products.edit', compact('product'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            'description' => 'nullable|string',
+            'category' => 'required|string',
+            'status' => 'required|in:in stock,out of stock,running out',
+        ]);
+
+        DB::table('products')->where('id', $id)->update($request->only(['name', 'price', 'description', 'category', 'status']));
+
+        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
+    }
+
+    public function destroy($id)
+    {
+        DB::table('products')->where('id', $id)->delete();
+        return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }
 }

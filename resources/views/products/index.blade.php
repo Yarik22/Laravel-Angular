@@ -1,52 +1,50 @@
 @extends('../HOC/layout')
 
-@section('title', 'Our Products')
+@section('title', 'Products')
 
-@section('header')
-    Explore Our Products
-@endsection
+@section('header', 'Products List')
 
 @section('content')
-    <p>Here is a list of our latest products. Check their availability and details below:</p>
-
-    <table border="1" cellpadding="10" cellspacing="0" style="width:100%; text-align: left; border-collapse: collapse;">
+    <a href="{{ route('products.create') }}" style="font-weight: bold;">Add Product</a>
+    @if(session('success'))
+        <div style="color: green;">{{ session('success') }}</div>
+    @endif
+    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
         <thead>
-            <tr style="background-color: #333; color: white;">
-                <th style="padding: 10px;">Name</th>
-                <th style="padding: 10px;">Price</th>
-                <th style="padding: 10px;">Description</th>
-                <th style="padding: 10px;">Category</th>
-                <th style="padding: 10px;">Status</th>
-                <th style="padding: 10px;">Details</th>
+            <tr>
+                <th style="border: 1px solid #ddd; padding: 8px;">Name</th>
+                <th style="border: 1px solid #ddd; padding: 8px;">Price</th>
+                <th style="border: 1px solid #ddd; padding: 8px;">Description</th>
+                <th style="border: 1px solid #ddd; padding: 8px;">Category</th>
+                <th style="border: 1px solid #ddd; padding: 8px;">Status</th>
+                <th style="border: 1px solid #ddd; padding: 8px;">Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($products as $id => $product)
-                <tr style="background-color: #f9f9f9; border-bottom: 1px solid #ccc;">
-                    <td style="padding: 10px;">{{ $product['name'] }}</td>
-                    <td style="padding: 10px;">${{ $product['price'] }}</td>
-                    <td style="padding: 10px;">{{ $product['description'] }}</td>
-                    <td style="padding: 10px;">{{ $product['category'] }}</td>
-                    <td style="padding: 10px;">
-                        @if(isset($product['status']))
-                            @if($product['status'] == 'in stock')
-                                <span style="color: green; font-weight: bold;">In Stock</span>
-                            @elseif($product['status'] == 'running out')
-                                <span style="color: orange; font-weight: bold;">Running Out</span>
-                            @elseif($product['status'] == 'out of stock')
-                                <span style="color: red; font-weight: bold;">Out of Stock</span>
-                            @else
-                                <span style="color: gray; font-weight: bold;">Unknown</span>
-                            @endif
-                        @else
-                            <span style="color: gray; font-weight: bold;">Status Not Available</span>
-                        @endif
-                    </td>
-                    <td style="padding: 10px;">
-                        <a href="{{ url('/products/' . $id) }}">View Details</a>
+            @foreach ($products as $product)
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 8px;">{{ $product->name }}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">{{ $product->price }}$</td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">{{ $product->description }}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">{{ $product->category }}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">{{ $product->status }}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">
+                        <a href="{{ route('products.show', $product->id) }}">View</a>
+                        <a href="{{ route('products.edit', $product->id) }}">Edit</a>
+                        <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;" onsubmit="return confirmDelete();">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" style="background: none; border: none; color: red; cursor: pointer;">Delete</button>
+                        </form>
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
+
+    <script>
+        function confirmDelete() {
+            return confirm('Are you sure you want to delete this product? This action cannot be undone.');
+        }
+    </script>
 @endsection

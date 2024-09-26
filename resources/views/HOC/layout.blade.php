@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="icon" href="https://images.ctfassets.net/l5fkpck1mwg3/1BROzHq9JQEMn7ZukjTfNX/cbd5765243427fd15fd3405e6cf37bc0/BWW_Web_AW5_10FreeBoneless_ProductImage__PromoCode_4000x3000.png">
     <title>@yield('title')</title>
     <style>
@@ -75,11 +76,7 @@
     <nav>
         <ul>
             <li><a href="{{ url('/') }}">Home</a></li>
-            <li><a href="{{ url('/about') }}">About</a></li>
-            <li><a href="{{ url('/services') }}">Services</a></li>
-            <li><a href="{{ url('/contact') }}">Contact</a></li>
             <li><a href="{{ url('/products') }}">Products</a></li>
-            <li><a href="{{ url('/redirect') }}">Redirect</a></li>
         </ul>
     </nav>
 
