@@ -27,11 +27,21 @@ return new class extends Migration
             $table->enum('status', ['in stock', 'out of stock', 'running out'])->default('in stock');
             $table->timestamps();
         });
+
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->string('role')->default('user');
+            $table->timestamps();
+        });
     }
 
     public function down(): void
     {
         Schema::dropIfExists('sessions');
         Schema::dropIfExists('products');
+        Schema::dropIfExists('users');
     }
 };

@@ -20,6 +20,20 @@
             <li><a href="{{ url('/') }}">Home</a></li>
             <li><a href="{{ url('/products?sort=asc') }}">Products</a></li>
         </ul>
+        
+        <!-- Auth buttons container -->
+        <div class="nav-auth">
+            @auth
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+            @endauth
+            @guest
+                <a href="{{ route('login') }}" class="auth-btn">Login</a>
+                <a href="{{ route('register') }}" class="auth-btn">Register</a>
+            @endguest
+        </div>
     </nav>
 
     <header>

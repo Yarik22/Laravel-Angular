@@ -14,7 +14,10 @@ body {
 
 nav {
     background-color: #333;
-    padding: 5vh;
+    padding: 2vh 5vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     position: relative;
 }
 
@@ -45,6 +48,7 @@ nav ul {
     padding: 0;
     margin: 0;
     transition: 0.3s ease;
+    flex: 1;
 }
 
 nav ul li {
@@ -60,6 +64,48 @@ nav ul li a {
 
 nav ul li a:hover {
     color: #ffa500;
+}
+
+/* New styling for auth buttons */
+.nav-auth {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav-auth a, .nav-auth form {
+    margin-left: 15px; /* Adds spacing between buttons */
+}
+
+.nav-auth .auth-btn {
+    color: #fff;
+    background-color: #444;
+    padding: 10px 20px;
+    border: none;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-auth .auth-btn:hover {
+    background-color: #ffa500;
+}
+
+.nav-auth .logout-btn {
+    color: #fff;
+    background-color: #444;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-auth .logout-btn:hover {
+    background-color: #ff3333;
 }
 
 header {
@@ -127,7 +173,6 @@ footer p {
 
     nav .menu-icon.active .bar:nth-child(2) {
         opacity: 0;
-
     }
 
     nav .menu-icon.active .bar:nth-child(3) {
