@@ -9,8 +9,9 @@
 @endsection
 
 @section('content')
+    @if (Auth::user()->role === "admin")
     <a href="{{ route('products.create') }}" class="add-product-button">Add Product</a>
-
+    @endif
     @if(session('success'))
         <div class="success-message">{{ session('success') }}</div>
     @endif
@@ -63,12 +64,16 @@
                     <td data-label="Status">{{ $product->status }}</td>
                     <td data-label="Actions">
                         <a href="{{ route('products.show', $product->id) }}">View</a>
+                        @if (Auth::user()->role === "admin" || Auth::user()->role === "moderator")
                         <a href="{{ route('products.edit', $product->id) }}">Edit</a>
+                        @endif
+                        @if (Auth::user()->role === "admin")
                         <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;" onsubmit="return confirmDelete();">
                             @csrf
                             @method('DELETE')
                             <button type="submit" style="background: none; border: none; color: red; cursor: pointer;">Delete</button>
                         </form>
+                        @endif
                     </td>
                 </tr>
             @empty
