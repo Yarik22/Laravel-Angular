@@ -4,31 +4,64 @@
 
 @section('header', 'Products List')
 
+@section('styles')
+    <link rel="stylesheet" href="{{ asset('css/products.css') }}">
+@endsection
+
 @section('content')
-    <a href="{{ route('products.create') }}" style="font-weight: bold;">Add Product</a>
+    <a href="{{ route('products.create') }}" class="add-product-button">Add Product</a>
+
     @if(session('success'))
-        <div style="color: green;">{{ session('success') }}</div>
+        <div class="success-message">{{ session('success') }}</div>
     @endif
-    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+
+    <form action="{{ route('products.index') }}" method="GET" class="filter-form">
+        <div class="form-field">
+            <label for="name">Name:</label>
+            <input type="text" name="name" id="name" value="{{ request('name') }}" placeholder="Enter product name" />
+        </div>
+
+        <div class="form-field">
+            <label for="status">Stock Status:</label>
+            <select name="status" id="status" onchange="this.form.submit()">
+                <option value="">All</option>
+                <option value="in stock" {{ request('status') == 'in stock' ? 'selected' : '' }}>In Stock</option>
+                <option value="out of stock" {{ request('status') == 'out of stock' ? 'selected' : '' }}>Out of Stock</option>
+                <option value="running out" {{ request('status') == 'running out' ? 'selected' : '' }}>Running Out</option>
+            </select>
+        </div>
+
+        <div class="form-field">
+            <label for="status">Submit:</label>
+            <button type="submit" class="submit-button">Filter</button>
+        </div>
+    </form>
+
+    <table>
         <thead>
             <tr>
-                <th style="border: 1px solid #ddd; padding: 8px;">Name</th>
-                <th style="border: 1px solid #ddd; padding: 8px;">Price</th>
-                <th style="border: 1px solid #ddd; padding: 8px;">Description</th>
-                <th style="border: 1px solid #ddd; padding: 8px;">Category</th>
-                <th style="border: 1px solid #ddd; padding: 8px;">Status</th>
-                <th style="border: 1px solid #ddd; padding: 8px;">Actions</th>
+                <th>Name</th>
+                <th>
+                    <a class="price-header" href="{{ route('products.index', array_merge(request()->query(), ['sort' => request('sort') == 'asc' ? 'desc' : 'asc'])) }}">
+                        Price
+                        <span class="sort-icon {{ request('sort') == 'asc' ? 'asc' : 'desc' }}"></span>
+                    </a>
+                </th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($products as $product)
-                <tr>
-                    <td style="border: 1px solid #ddd; padding: 8px;">{{ $product->name }}</td>
-                    <td style="border: 1px solid #ddd; padding: 8px;">{{ $product->price }}$</td>
-                    <td style="border: 1px solid #ddd; padding: 8px;">{{ $product->description }}</td>
-                    <td style="border: 1px solid #ddd; padding: 8px;">{{ $product->category }}</td>
-                    <td style="border: 1px solid #ddd; padding: 8px;">{{ $product->status }}</td>
-                    <td style="border: 1px solid #ddd; padding: 8px;">
+            @forelse ($products as $product)
+                <tr class="product-row">
+                    <td data-label="Name">{{ $product->name }}</td>
+                    <td data-label="Price">{{ $product->price }}$</td>
+                    <td data-label="Description">{{ $product->description }}</td>
+                    <td data-label="Category">{{ $product->category }}</td>
+                    <td data-label="Status">{{ $product->status }}</td>
+                    <td data-label="Actions">
                         <a href="{{ route('products.show', $product->id) }}">View</a>
                         <a href="{{ route('products.edit', $product->id) }}">Edit</a>
                         <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;" onsubmit="return confirmDelete();">
@@ -38,7 +71,11 @@
                         </form>
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="6" style="text-align: center;">No products found</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 

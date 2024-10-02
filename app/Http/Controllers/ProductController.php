@@ -2,16 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ProductController
 {
-    public function index()
-    {
-        $products = DB::table('products')->get();
-        return view('products.index', compact('products'));
+    public function index(Request $request)
+{
+    $status = $request->query('status');
+    $name = $request->query('name');
+    $sortOrder = $request->query('sort', 'asc');
+
+    $query = Product::query();
+
+    if ($status) {
+        $query->where('status', $status);
     }
+
+    if ($name) {
+        $query->where('name', 'like', '%' . $name . '%');
+    }
+
+    $query->orderBy('price', $sortOrder);
+
+    $products = $query->get();
+
+    return view('products.index', compact('products', 'status', 'name', 'sortOrder'));
+}
 
     public function create()
     {
@@ -28,20 +45,20 @@ class ProductController
             'status' => 'required|in:in stock,out of stock,running out',
         ]);
 
-        DB::table('products')->insert($request->only(['name', 'price', 'description', 'category', 'status']));
+        Product::create($request->only(['name', 'price', 'description', 'category', 'status']));
 
         return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
 
     public function show($id)
     {
-        $product = DB::table('products')->where('id', $id)->first();
+        $product = Product::findOrFail($id);
         return view('products.show', compact('product'));
     }
 
     public function edit($id)
     {
-        $product = DB::table('products')->where('id', $id)->first();
+        $product = Product::findOrFail($id);
         return view('products.edit', compact('product'));
     }
 
@@ -55,14 +72,16 @@ class ProductController
             'status' => 'required|in:in stock,out of stock,running out',
         ]);
 
-        DB::table('products')->where('id', $id)->update($request->only(['name', 'price', 'description', 'category', 'status']));
+        $product = Product::findOrFail($id);
+        $product->update($request->only(['name', 'price', 'description', 'category', 'status']));
 
         return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
 
     public function destroy($id)
     {
-        DB::table('products')->where('id', $id)->delete();
+        Product::findOrFail($id)->delete();
+
         return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }
 }
