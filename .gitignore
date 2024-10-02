@@ -49,5 +49,4 @@ environments/
 *-debug.log
 .runtimeconfig.json
 .env
-bootstrap
 vendor
