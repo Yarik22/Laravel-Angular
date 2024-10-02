@@ -48,3 +48,6 @@ environments/
 .firebase
 *-debug.log
 .runtimeconfig.json
+.env
+bootstrap
+vendor
