@@ -4,7 +4,7 @@ import {
   HostListener,
   OnInit,
 } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { ThemeService } from './services/theme.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngrx/store';
@@ -14,7 +14,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, TranslateModule, CommonModule, FormsModule],
+  imports: [RouterOutlet, TranslateModule, CommonModule, FormsModule, RouterLink],
   styleUrl: './app.component.scss',
   templateUrl: './app.component.html',
 })
