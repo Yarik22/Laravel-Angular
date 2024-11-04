@@ -1,11 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { nameValidator, passwordStrengthValidator } from '../validators/custom-validators';
 
 @Component({
   selector: 'app-debug',
@@ -20,12 +16,12 @@ export class DebugComponent {
   constructor(private fb: FormBuilder) {
     this.registrationForm = this.fb.group({
       userInfo: this.fb.group({
-        firstName: ['', [Validators.required, Validators.minLength(2)]],
-        lastName: ['', [Validators.required, Validators.minLength(2)]],
+        firstName: ['', [Validators.required, Validators.minLength(2), nameValidator()]],
+        lastName: ['', [Validators.required, Validators.minLength(2), nameValidator()]],
       }),
       accountInfo: this.fb.group({
         email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required, Validators.minLength(6)]],
+        password: ['', [Validators.required, Validators.minLength(6), passwordStrengthValidator()]],
       }),
     });
   }
@@ -38,7 +34,7 @@ export class DebugComponent {
       },
       accountInfo: {
         email: 'clem@example.com',
-        password: '2110817',
+        password: 'C2110817',
       },
     });
   }
@@ -50,6 +46,7 @@ export class DebugComponent {
   get accountInfo() {
     return this.registrationForm.get('accountInfo') as FormGroup;
   }
+
   //FormsModule
   // user = {
   //   firstName: '',
