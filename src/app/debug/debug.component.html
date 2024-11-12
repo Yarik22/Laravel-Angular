@@ -1,50 +1,9 @@
-<div class="registration-form">
-  <form [formGroup]="registrationForm">
-    <div formGroupName="userInfo">
-      <label>
-        First Name:
-        <input formControlName="firstName" />
-      </label>
-      <div *ngIf="userInfo.get('firstName')?.invalid && userInfo.get('firstName')?.touched">
-        <small *ngIf="userInfo.get('firstName')?.errors?.['required']">First name is required.</small>
-        <small *ngIf="userInfo.get('firstName')?.errors?.['minlength']">Minimum length is 2 characters.</small>
-        <small *ngIf="userInfo.get('firstName')?.errors?.['hasNumbers']">First name should not contain numbers.</small>
-      </div>
-
-      <label>
-        Last Name:
-        <input formControlName="lastName" />
-      </label>
-      <div *ngIf="userInfo.get('lastName')?.invalid && userInfo.get('lastName')?.touched">
-        <small *ngIf="userInfo.get('lastName')?.errors?.['required']">Last name is required.</small>
-        <small *ngIf="userInfo.get('lastName')?.errors?.['minlength']">Minimum length is 2 characters.</small>
-        <small *ngIf="userInfo.get('lastName')?.errors?.['hasNumbers']">Last name should not contain numbers.</small>
-      </div>
-    </div>
-
-    <div formGroupName="accountInfo">
-      <label>
-        Email:
-        <input formControlName="email" />
-      </label>
-      <div *ngIf="accountInfo.get('email')?.invalid && accountInfo.get('email')?.touched">
-        <small *ngIf="accountInfo.get('email')?.errors?.['required']">Email is required.</small>
-        <small *ngIf="accountInfo.get('email')?.errors?.['email']">Enter a valid email address.</small>
-      </div>
-
-      <label>
-        Password:
-        <input type="password" formControlName="password" />
-      </label>
-      <div *ngIf="accountInfo.get('password')?.invalid && accountInfo.get('password')?.touched">
-        <small *ngIf="accountInfo.get('password')?.errors?.['required']">Password is required.</small>
-        <small *ngIf="accountInfo.get('password')?.errors?.['minlength']">Minimum length is 6 characters.</small>
-        <small *ngIf="accountInfo.get('password')?.errors?.['weakPassword']">Password must contain at least one number and one uppercase letter.</small>
-      </div>
-    </div>
-
-    <button type="button" (click)="updateForm()">Update Form</button>
-  </form>
-
-  <pre>{{ registrationForm.value | json }}</pre>
-</div>
+<div
+  style="
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+  "
+  id="placeholderContainer"
+></div>

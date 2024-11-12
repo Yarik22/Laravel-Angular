@@ -1,66 +1,29 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { nameValidator, passwordStrengthValidator } from '../validators/custom-validators';
+import { AfterViewInit, Component, ElementRef } from '@angular/core';
+import { StylingService } from '../services/styling.service';
 
 @Component({
   selector: 'app-debug',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [],
   templateUrl: './debug.component.html',
   styleUrls: ['./debug.component.scss'],
 })
-export class DebugComponent {
-  registrationForm: FormGroup;
+export class DebugComponent implements AfterViewInit {
+  constructor(private stylingService: StylingService, private el: ElementRef) {}
 
-  constructor(private fb: FormBuilder) {
-    this.registrationForm = this.fb.group({
-      userInfo: this.fb.group({
-        firstName: ['', [Validators.required, Validators.minLength(2), nameValidator()]],
-        lastName: ['', [Validators.required, Validators.minLength(2), nameValidator()]],
-      }),
-      accountInfo: this.fb.group({
-        email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required, Validators.minLength(6), passwordStrengthValidator()]],
-      }),
-    });
+  ngAfterViewInit(): void {
+    const container = this.el.nativeElement.querySelector(
+      '#placeholderContainer'
+    );
+    if (container) {
+      this.stylingService.renderPlaceholder(
+        container,
+        1360,
+        720,
+        'black',
+        'white',
+        40
+      );
+    }
   }
-
-  updateForm() {
-    this.registrationForm.setValue({
-      userInfo: {
-        firstName: 'Clem',
-        lastName: 'Son',
-      },
-      accountInfo: {
-        email: 'clem@example.com',
-        password: 'C2110817',
-      },
-    });
-  }
-
-  get userInfo() {
-    return this.registrationForm.get('userInfo') as FormGroup;
-  }
-
-  get accountInfo() {
-    return this.registrationForm.get('accountInfo') as FormGroup;
-  }
-
-  //FormsModule
-  // user = {
-  //   firstName: '',
-  //   lastName: '',
-  //   email: '',
-  //   password: ''
-  // };
-
-  // updateForm() {
-  //   this.user = {
-  //     firstName: 'Clem',
-  //     lastName: 'Son',
-  //     email: 'clem@example.com',
-  //     password: '2110817',
-  //   };
-  // }
 }
