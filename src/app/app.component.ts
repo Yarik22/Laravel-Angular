@@ -4,7 +4,7 @@ import {
   HostListener,
   OnInit,
 } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { ThemeService } from './services/theme.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngrx/store';
@@ -14,7 +14,13 @@ import { FormsModule, NgForm } from '@angular/forms';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, TranslateModule, CommonModule, FormsModule, RouterLink],
+  imports: [
+    RouterOutlet,
+    TranslateModule,
+    CommonModule,
+    FormsModule,
+    RouterLink,
+  ],
   styleUrl: './app.component.scss',
   templateUrl: './app.component.html',
 })
@@ -43,7 +49,8 @@ export class AppComponent implements OnInit, AfterContentInit {
 
   constructor(
     private themeService: ThemeService,
-    private translator: TranslateService
+    private translator: TranslateService,
+    private router: Router
   ) {}
   ngAfterContentInit(): void {
     this.isDarkTheme = this.themeService.theme === 'dark';
@@ -115,5 +122,17 @@ export class AppComponent implements OnInit, AfterContentInit {
       )}`;
       window.open(emailLink, '_blank');
     }
+  }
+
+  navigateWithParams() {
+    this.router.navigate(['/debug'], {
+      queryParams: {
+        bg: 'black',
+        height: 600,
+        width: 800,
+        color: 'gray',
+        font: 40,
+      },
+    });
   }
 }

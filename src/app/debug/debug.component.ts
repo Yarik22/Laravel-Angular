@@ -1,5 +1,6 @@
-import { AfterViewInit, Component, ElementRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
 import { StylingService } from '../services/styling.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-debug',
@@ -8,8 +9,26 @@ import { StylingService } from '../services/styling.service';
   templateUrl: './debug.component.html',
   styleUrls: ['./debug.component.scss'],
 })
-export class DebugComponent implements AfterViewInit {
-  constructor(private stylingService: StylingService, private el: ElementRef) {}
+export class DebugComponent implements AfterViewInit, OnInit {
+  textColor?: string;
+  textFont?: number;
+  divColor?: string;
+  divWidth?: number;
+  divHeight?: number;
+  constructor(
+    private stylingService: StylingService,
+    private el: ElementRef,
+    private route: ActivatedRoute
+  ) {}
+  ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      this.textColor = params['bg'];
+      this.textFont = +params['font'];
+      this.divColor = params['color'];
+      this.divWidth = +params['width'];
+      this.divHeight = +params['height'];
+    });
+  }
 
   ngAfterViewInit(): void {
     const container = this.el.nativeElement.querySelector(
@@ -18,11 +37,11 @@ export class DebugComponent implements AfterViewInit {
     if (container) {
       this.stylingService.renderPlaceholder(
         container,
-        1360,
-        720,
-        'black',
-        'white',
-        40
+        this.divWidth,
+        this.divHeight,
+        this.divColor,
+        this.textColor,
+        this.textFont
       );
     }
   }
